@@ -12,6 +12,12 @@ const useUser = () => {
         }
     }, [response, loading])
 
+    // deleteUser = {
+    //     fetch('https://jsonplaceholder.typicode.com/posts/1', {
+    //         method: 'DELETE',
+    //       });
+    // }
+
     return [users, loading]
 }
 export default useUser
