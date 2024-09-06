@@ -1,3 +1,16 @@
+/**
+ * A loading spinner component to indicate that content is being loaded.
+ * It displays a centered spinner with a semi-transparent background.
+ *
+ * @description
+ * This component is useful for displaying a loading state while data is being fetched or processed.
+ * It includes an SVG spinner and an accessibility label to indicate loading status.
+ */
+
+/**
+ * @Loader
+ * @returns {JSX.Element}
+ */
 const Loader = () => {
   return (
     <div

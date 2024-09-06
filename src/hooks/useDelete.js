@@ -5,10 +5,11 @@ const useDelete = (url) => {
     const [isDeleting, setIsDeleting] = useState(false);
     const [error, setError] = useState(null);
 
-    const deleteItem = async (id) => {
+    const deleteRequest = async (id) => {
         setIsDeleting(true);
         setError(null);
         try {
+            // console.log(`${url}/${id}`);
             const response = await fetch(`${url}/${id}`, {
                 method: 'DELETE',
                 mode: "cors",
@@ -17,6 +18,7 @@ const useDelete = (url) => {
                 toast.error(response.statusText);
                 throw new Error('Network response was not ok');
             }
+            return response
 
         } catch (err) {
             setError(err.message);
@@ -27,7 +29,7 @@ const useDelete = (url) => {
         }
     };
 
-    return { deleteItem, isDeleting, error };
+    return { deleteRequest, isDeleting, error };
 };
 
 export default useDelete;

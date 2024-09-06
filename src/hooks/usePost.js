@@ -26,5 +26,29 @@ export const usePost = (url) => {
         }
 
     };
-    return { isLoading, error, postRequest };
+
+    const putRequest = async (data) => {
+        setIsLoading(true);
+        setErr(null)
+        try {
+            const res = await fetch(url, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(data),
+            });
+            if (!res.ok) toast.error(res.statusText);
+            return res;
+        } catch (error) {
+            toast.error(error.message);
+            setErr(error.message);
+        } finally {
+            setIsLoading(false);
+        }
+
+    };
+
+    return { isLoading, error, postRequest, putRequest };
 };

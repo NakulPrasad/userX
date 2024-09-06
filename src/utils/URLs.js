@@ -2,7 +2,9 @@
 
 const URLs = {
     getUsers: "https://jsonplaceholder.typicode.com/users",
-    postUser: "https://jsonplaceholder.typicode.com/posts"
+    postUser: "https://jsonplaceholder.typicode.com/posts",
+    deleteUser: "https://jsonplaceholder.typicode.com/posts",
+
 }
 
 export default URLs;

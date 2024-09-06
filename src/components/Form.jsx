@@ -1,17 +1,33 @@
+/**
+ * A form component for adding or updating user details. It includes fields for user information
+ * and provides functionality for form submission and user deletion.
+ *
+ */
+
 import { useState } from "react";
 import { usePost } from "../hooks/usePost";
 import URLs from "../utils/URLs";
 import { toast } from "react-toastify";
 import Loader from "./Loader";
+import useDelete from "../hooks/useDelete";
+import PropTypes from "prop-types";
 
-const Form = ({ onClose, userDetails }) => {
-  const { isLoading, postRequest } = usePost(URLs.postUser);
+/**
+ *
+ * @prop {Function} onClose - Function to close the form modal.
+ * @prop {Object} [userDetails] - Details of the user to be edited, if any. Includes `id`, `name`, `username`, `email`, and `phone`.
+ * @prop {string} action - Action to display on the submit button and determine if the delete button should be shown ("Add" or "Update").
+ * @returns {JSX.Element} The rendered form component.
+ */
+
+const Form = ({ onClose, userDetails, action }) => {
+  const { deleteRequest } = useDelete(URLs.deleteUser);
+  const { isLoading, postRequest, putRequest } = usePost(URLs.postUser);
   const [formData, setFormData] = useState({
     name: userDetails?.name || "",
     username: userDetails?.username || "",
     email: userDetails?.email || "",
     phone: userDetails?.phone || "",
-    password: userDetails?.password || "",
   });
 
   const handleChange = (e) => {
@@ -24,9 +40,26 @@ const Form = ({ onClose, userDetails }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await postRequest(formData);
+    let res, message;
+    if (action === "Update") {
+      res = await putRequest(formData);
+      message = "User Updated Success";
+    } else if (action === "Add") {
+      res = await postRequest(formData);
+      message = "User Created Success";
+    }
     if (res.ok) {
-      toast.success("User Created Success");
+      toast.success(message);
+      onClose();
+    }
+  };
+
+  const handleDelete = async (e) => {
+    e.preventDefault();
+    const res = await deleteRequest(userDetails?.id);
+    console.log(res);
+    if (res.ok) {
+      toast.success("User Deleted Successfully");
       onClose();
     }
   };
@@ -107,29 +140,19 @@ const Form = ({ onClose, userDetails }) => {
             required
           />
         </div>
-        <div>
-          <label
-            htmlFor="password"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            Your password
-          </label>
-          <input
-            type="password"
-            name="password"
-            id="password"
-            value={formData.password}
-            placeholder="••••••••"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-            onChange={handleChange}
-            required
-          />
-        </div>
         <button
           type="submit"
           className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
         >
-          Create User
+          {action}
+        </button>
+        <button
+          onClick={handleDelete}
+          className={`w-full text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 ${
+            action === "Add" && "hidden"
+          } `}
+        >
+          Delete
         </button>
       </form>
     </div>
@@ -137,3 +160,15 @@ const Form = ({ onClose, userDetails }) => {
 };
 
 export default Form;
+
+Form.propTypes = {
+  onClose: () => {},
+  userDetails: {
+    id: PropTypes.string,
+    name: PropTypes.string,
+    username: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+  },
+  action: PropTypes.string,
+};
