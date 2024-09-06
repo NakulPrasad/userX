@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
+
+.cta-btn {
+    @apply py-2 px-5 bg-buttonPrimary text-white font-semibold rounded hover:bg-buttonPrimaryHover;
+}
+
 @tailwind utilities;

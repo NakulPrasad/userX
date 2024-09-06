@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 const useFetch = (url) => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null)
@@ -15,6 +16,7 @@ const useFetch = (url) => {
             } catch (error) {
                 console.error(error);
                 setError(error)
+                toast.error(error)
             } finally {
                 setLoading(false);
             }
