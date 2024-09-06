@@ -1,5 +1,5 @@
 <p align="center">
-  <h3 align="center">UserX X</h3>
+  <h3 align="center">UserX</h3>
 
   <p align="center">
     "Modern User Management Solution"
